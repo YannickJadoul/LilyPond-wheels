@@ -53,7 +53,7 @@ Scripts shipped with LilyPond are also available; use the optional argument to
 When a new LilyPond release is out, run
 
 ```
-tox -- <version> 0
+hatch run build <version> 0
 ```
 
 This leaves wheels of LilyPond `<version>` in `build/`. If they look good (use a
@@ -63,6 +63,12 @@ venv to check), upload them with
 python -m twine upload build/*.whl
 ```
 
-The `0` in the `tox` command is the build number. In case something goes wrong
+The `0` in the `hatch` command is the build number. In case something goes wrong
 in published wheels, fixed wheels should be uploaded with a build number of `1`
 (then `2`, etc.).
+
+For type checking:
+
+```
+hatch run mypy:check
+```

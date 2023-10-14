@@ -1,0 +1,21 @@
+[project]
+name = "irrelevant"
+version = "0"
+
+[tool.hatch.envs.default]
+dependencies = [
+    "requests",
+]
+
+[tool.hatch.envs.default.scripts]
+build = "python build_wheels.py {args}"
+
+[tool.hatch.envs.mypy]
+dependencies = [
+    "mypy",
+    "types-requests",
+    "types-tqdm",
+]
+
+[tool.hatch.envs.mypy.scripts]
+check = "mypy build_wheels.py"
