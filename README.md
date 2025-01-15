@@ -1,5 +1,8 @@
 # LilyPond wheels
 
+**ARCHIVED** (January 2025): This project is unmaintained. Please contact me if you'd
+like to pick it up.
+
 ## What's this?
 
 [*GNU LilyPond*](https://lilypond.org) is a text-based music typesetter.
