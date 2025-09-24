@@ -55,7 +55,9 @@ def build(plat: str, archive: str, plat_tag: str):
 
     if plat == "linux" or plat == "macos":
         # Work around the fact that wheels cannot include empty directories...
-        empty = unpack_dest / "lilypond-binaries" / "lib" / "python3.10" / "lib-dynload"
+        lib_python_dirs = list((unpack_dest / "lilypond-binaries" / "lib").glob("python*"))
+        assert len(lib_python_dirs) == 1
+        empty = lib_python_dirs[0] / "lib-dynload"
         (empty / ".keep").touch()
 
     # Create the .dist-info directory
