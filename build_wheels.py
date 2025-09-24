@@ -16,6 +16,7 @@ https://packaging.python.org/en/latest/specifications/core-metadata
 """
 
 import argparse
+import base64
 import csv
 import hashlib
 import io
@@ -25,6 +26,12 @@ import zipfile
 from pathlib import Path
 import requests
 import shutil
+
+
+# See https://peps.python.org/pep-0427/#appendix
+def urlsafe_b64encode_nopad(data):
+    return base64.urlsafe_b64encode(data).rstrip(b'=')
+
 
 p: argparse.ArgumentParser = argparse.ArgumentParser()
 p.add_argument("version", help="version of LilyPond to package")
@@ -113,7 +120,8 @@ def executable(script="lilypond"):
             info: zipfile.ZipInfo = zipfile.ZipInfo.from_file(path, relpath)
             contents: bytes = path.read_bytes()
             members.append((info, contents))
-            digest = "sha256=" + hashlib.sha256(contents).hexdigest()
+            b64_hash = urlsafe_b64encode_nopad(hashlib.sha256(contents).digest())
+            digest = "sha256=" + b64_hash.decode('ascii')
             record_tuples.append((str(relpath), digest, str(info.file_size)))
 
     # Build RECORD. Each line contains the file name, a hash and the
