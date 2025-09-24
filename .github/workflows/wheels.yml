@@ -1,0 +1,45 @@
+name: Wheels
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
+      build:
+        description: 'Build number'
+        default: 0
+        required: false
+        type: number
+
+jobs:
+  build:
+    name: Build wheels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+            python-version: '3.13'
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Build wheels
+        run: |
+          hatch run build ${{ inputs.version }} ${{ inputs.build }}
+
+      - name: Upload built wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels_${{ inputs.version }}_${{ inputs.build }}
+          path: build/*.whl
+          if-no-files-found: error
